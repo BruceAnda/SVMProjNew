@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:keepScreenOn="true"
+    android:orientation="vertical"
+    tools:context="cn.zhaoliang5156.svmprojnew.MainActivity">
+
+    <TextView
+        android:id="@+id/tvLable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Label:0" />
+
+    <TextView
+        android:id="@+id/tvAcc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ACC:" />
+
+    <TextView
+        android:id="@+id/tvAccuracy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Accuracy" />
+
+    <cn.zhaoliang5156.androidsvmlib.view.LabelView
+        android:id="@+id/lableView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <cn.zhaoliang5156.androidsvmlib.view.FeatureView
+        android:id="@+id/featureView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <cn.zhaoliang5156.androidsvmlib.view.ControllerView
+        android:id="@+id/contrllerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>
