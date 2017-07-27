@@ -42,7 +42,9 @@ class MainActivity : AppCompatActivity() {
     // 选择feature的监听器对象
     var onFeatureItemClickListener = object : FeatureAdapter.OnFeatureItemClickListener {
         override fun onControllerItemClick(view: View, position: Int) {
+            // 更新特征view
             featureView.notifyDataSetChange(position)
+            // 设置特征
             svm.setFeatrues(featureView.getData())
         }
     }
@@ -54,6 +56,7 @@ class MainActivity : AppCompatActivity() {
                 0 -> {
                     // 当点击收集数据的时候设置成收集数据模式
                     lableView.setCollectionMode(true)
+                    // 开始采集数据
                     svm.startCollection()
                 }
                 1 -> {
@@ -63,6 +66,7 @@ class MainActivity : AppCompatActivity() {
                 2 -> {
                     // 当点击测试的时候设置成测试模式
                     lableView.setCollectionMode(false)
+                    // 开始测试
                     svm.test()
                 }
                 3 -> {
@@ -70,19 +74,31 @@ class MainActivity : AppCompatActivity() {
                     svm.deleteFile()
                 }
             }
+            // 更新控制view
             contrllerView.notifyDataSetChange(position)
         }
     }
 
     var onControllerListener = object : SVM.SVMListener {
+
+        /**
+         * 传感器数据改的的时候调用
+         */
         override fun onSensorChanged(acc: Double) {
             tvAcc.text = "ACC:${acc}"
         }
 
+        /**
+         * 训练失败的时候调用
+         */
         override fun onTrainFaile() {
             Toast.makeText(this@MainActivity, "样本错误，训练失败，请检查样本文件", Toast.LENGTH_SHORT).show()
         }
 
+        /**
+         * 识别结果成功的时候调用
+         * @param code 识别的结果，也就是标记的label
+         */
         override fun onTestSuccess(code: Int) {
             runOnUiThread {
                 tvLable.text = "识别结果${code}"
@@ -90,6 +106,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        /**
+         * 训练模型成功的时候调用
+         * @param accuracyInfo 精度信息
+         */
         override fun onTrainSuccess(accuracyInfo: String) {
             runOnUiThread {
                 tvAccuracy.text = accuracyInfo
@@ -97,6 +117,9 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        /**
+         * 删除文件成功的时候调用
+         */
         override fun deleteFileSuccess() {
             runOnUiThread {
                 Toast.makeText(this@MainActivity, "删除文件成功！", Toast.LENGTH_SHORT).show()
@@ -105,8 +128,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        /**
+         * 当写文件成功的时候调用，说明这个lable的样本数据已经增加了一个
+         */
         override fun onWriteSuccess() {
-            lableView.notifyDataSetLable(svm.trainLable!!)
+            lableView.notifyDataSetLable(svm.trainLable)
         }
     }
 
@@ -114,18 +140,17 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        svm = SVM(this@MainActivity, hz, "${filesDir}", onControllerListener)
 
         // Lable 部分
         val lableDataList = ArrayList<LableData>()
-        lableDataList.add(LableData(R.mipmap.gait_walk_off, R.mipmap.gait_walk, R.mipmap.gait_walk_test, 0, 1, "${filesDir}/train0", 0))
+        lableDataList.add(LableData(R.mipmap.gait_still_off, R.mipmap.gait_still, R.mipmap.gait_still_test, 0, 1, "${filesDir}/train0", 0))
         lableDataList.add(LableData(R.mipmap.gait_walk_off, R.mipmap.gait_walk, R.mipmap.gait_walk_test, 0, 0, "${filesDir}/train1", 0))
-        lableDataList.add(LableData(R.mipmap.gait_walk_off, R.mipmap.gait_walk, R.mipmap.gait_walk_test, 0, 0, "${filesDir}/train2", 0))
-        lableDataList.add(LableData(R.mipmap.gait_walk_off, R.mipmap.gait_walk, R.mipmap.gait_walk_test, 0, 0, "${filesDir}/train3", 0))
-        lableDataList.add(LableData(R.mipmap.gait_walk_off, R.mipmap.gait_walk, R.mipmap.gait_walk_test, 0, 0, "${filesDir}/train4", 0))
-        lableDataList.add(LableData(R.mipmap.gait_walk_off, R.mipmap.gait_walk, R.mipmap.gait_walk_test, 0, 0, "${filesDir}/train5", 0))
-        lableDataList.add(LableData(R.mipmap.gait_walk_off, R.mipmap.gait_walk, R.mipmap.gait_walk_test, 0, 0, "${filesDir}/train6", 0))
-        lableDataList.add(LableData(R.mipmap.gait_walk_off, R.mipmap.gait_walk, R.mipmap.gait_walk_test, 0, 0, "${filesDir}/train7", 0))
+        lableDataList.add(LableData(R.mipmap.gait_run_off, R.mipmap.gait_run, R.mipmap.gait_run_test, 0, 0, "${filesDir}/train2", 0))
+        lableDataList.add(LableData(R.mipmap.up_stars_off, R.mipmap.up_stars, R.mipmap.up_stars_test, 0, 0, "${filesDir}/train3", 0))
+        lableDataList.add(LableData(R.mipmap.down_stars_off, R.mipmap.down_stars, R.mipmap.down_stars_test, 0, 0, "${filesDir}/train4", 0))
+        //  lableDataList.add(LableData(R.mipmap.gait_walk_off, R.mipmap.gait_walk, R.mipmap.gait_walk_test, 0, 0, "${filesDir}/train5", 0))
+        //  lableDataList.add(LableData(R.mipmap.gait_walk_off, R.mipmap.gait_walk, R.mipmap.gait_walk_test, 0, 0, "${filesDir}/train6", 0))
+        //  lableDataList.add(LableData(R.mipmap.gait_walk_off, R.mipmap.gait_walk, R.mipmap.gait_walk_test, 0, 0, "${filesDir}/train7", 0))
         lableView.setData(lableDataList, 4, onLableItemClickListener)
 
         // Feature 部分
@@ -150,14 +175,17 @@ class MainActivity : AppCompatActivity() {
         featureDataList.add(FeatureData(true, "频域峰度"))
         featureDataList.add(FeatureData(true, "中位数"))
         featureView.setData(featureDataList, 4, onFeatureItemClickListener)
-        svm.setFeatrues(featureView.getData())
-        // Controller 部分
 
+        // Controller 部分
         val contrllerDataList = ArrayList<ControllerData>()
         contrllerDataList.add(ControllerData(R.mipmap.sample_off, R.mipmap.sample, false, "采集"))
         contrllerDataList.add(ControllerData(R.mipmap.train_off, R.mipmap.train, false, "训练"))
         contrllerDataList.add(ControllerData(R.mipmap.test_off, R.mipmap.test, false, "测试"))
         contrllerDataList.add(ControllerData(R.mipmap.delete_off, R.mipmap.delete, false, "删除"))
         contrllerView.setData(contrllerDataList, 4, onControllerItemClickListener)
+
+        // 创建SVM对象
+        svm = SVM(this@MainActivity, hz, "${filesDir}", onControllerListener)
+        svm.setFeatrues(featureView.getData())
     }
 }

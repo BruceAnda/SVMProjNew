@@ -22,6 +22,12 @@ import java.io.*
  *          1. 收集样本文件
  *          2. 训练Model
  *          3. 识别结果
+ *     使用说明：
+ *          1. 创建SVM对象
+ *          2. 设置lable 和 features
+ *          3. 收集样本
+ *          4. 训练model
+ *          5. 测试
  *     @author zhaoliang 2017-7-25 V1
  * </pre>
  *
@@ -37,7 +43,7 @@ class SVM {
     // 存放文件的目录
     var mDir: String? = null
     // 标记的lable
-    var trainLable: Int? = 0
+    var trainLable: Int = 0
 
     /**
      * 构造方法
